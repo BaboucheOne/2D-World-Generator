@@ -5,6 +5,11 @@ namespace WorldGenerator2DClassLib
 {
     public class RadialGradient : NoiseFilterBase
     {
+        public RadialGradient() : base()
+        {
+            Name = "Radial gradient";
+        }
+
         public RadialGradient(int width, int height) : base(width, height)
         {
             Name = "Radial gradient";

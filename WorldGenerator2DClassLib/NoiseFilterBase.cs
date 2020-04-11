@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 
 namespace WorldGenerator2DClassLib
@@ -15,7 +15,6 @@ namespace WorldGenerator2DClassLib
 
         public NoiseFilterBase()
         {
-
         }
 
         public NoiseFilterBase(int width, int height)
@@ -66,6 +65,8 @@ namespace WorldGenerator2DClassLib
             fastNoise.SetFractalGain(gain);
         }
 
+        public int Seed => fastNoise.GetSeed();
+
         public float[] GetGradient()
         {
             return gradient;
@@ -86,6 +87,24 @@ namespace WorldGenerator2DClassLib
 
         public virtual void Initialize()
         {
+        }
+
+        public Bitmap GenerateImage()
+        {
+            if (gradient == null) return null;
+
+            Bitmap img = new Bitmap((int)Dimension.X, (int)Dimension.Y);
+            for (int x = 0; x < Dimension.X; x++)
+            {
+                for (int y = 0; y < Dimension.Y; y++)
+                {
+                    float sample = gradient[y * (int)Dimension.X + x] * 255f;
+                    if (sample < 0) sample = 0; //FIXME : c est nul.
+                    img.SetPixel(x, y, Color.FromArgb((int)sample, (int)sample, (int)sample));
+                }
+            }
+
+            return img;
         }
     }
 }

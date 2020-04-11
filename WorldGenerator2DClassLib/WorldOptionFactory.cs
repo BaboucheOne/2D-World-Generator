@@ -6,6 +6,8 @@ namespace WorldGenerator2DClassLib
 {
     public partial class WorldOptionFactory
     {
+        private const string fileExtension = ".xml";
+
         public static void Save(string filename, WorldOption option)
         {
             StreamWriter writer = new StreamWriter(filename);
@@ -19,11 +21,16 @@ namespace WorldGenerator2DClassLib
             writer.Close();
         }
 
-        public static WorldOption Load(string filename)
+        public static WorldOption Load(string path)
         {
-            if (!File.Exists(filename)) throw new System.Exception("Option file is missing !");
+            if (Path.GetExtension(path) != fileExtension)
+            {
+                throw new System.ArgumentException("File extension must be xml.");
+            }
 
-            StreamReader reader = new StreamReader(filename);
+            if (!File.Exists(path)) throw new System.Exception("Option file is missing !");
+
+            StreamReader reader = new StreamReader(path);
             XmlSerializer serializer = new XmlSerializer(typeof(XMLOption));
             XMLOption option = (XMLOption)serializer.Deserialize(reader);
             reader.Close();

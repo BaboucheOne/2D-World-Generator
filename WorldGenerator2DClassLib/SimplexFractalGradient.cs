@@ -1,9 +1,12 @@
-﻿using System;
-
-namespace WorldGenerator2DClassLib
+﻿namespace WorldGenerator2DClassLib
 {
     public class SimplexFractalGradient : NoiseFilterBase
     {
+        public SimplexFractalGradient() : base()
+        {
+            Name = "Simplex Fractal";
+        }
+
         public SimplexFractalGradient(int width, int height) : base(width, height)
         {
             Name = "Simplex Fractal";
@@ -12,7 +15,6 @@ namespace WorldGenerator2DClassLib
         public override float[] ComputeGradient()
         {
             float scale = (float)gradientArguments[0];
-            SetRandomSeed(0, 1000000);
 
             for (int x = 0; x < Width; x++)
             {

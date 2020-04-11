@@ -6,14 +6,29 @@ namespace WorldGenerator2DClassLib
 {
     public class WorldBuilder
     {
-        public WorldOption Option;
+        public WorldOption Option { get; private set; }
         private readonly Dictionary<float, Color> worldColor = new Dictionary<float, Color>();
         private HashSet<NoiseFilterBase> filters = new HashSet<NoiseFilterBase>();
 
+        public WorldBuilder()
+        {
+            SetOption(new WorldOption(600, 600, 0f, new Dictionary<float, Color>() { { 0f, Color.Black } }));
+        }
+
         public WorldBuilder(WorldOption option)
+        {
+            SetOption(option);
+        }
+
+        public void SetOption(WorldOption option)
         {
             Option = option;
             SetWorldColor(option.WorldColor);
+
+            foreach (NoiseFilterBase filter in filters)
+            {
+                filter.SetDimension(Option.Width, Option.Height);
+            }
         }
 
         public void SetWorldColor(Dictionary<float, Color> colors)
@@ -51,6 +66,11 @@ namespace WorldGenerator2DClassLib
             filters.Remove(filter);
         }
 
+        public void RemoveAllFilters()
+        {
+            filters.Clear();
+        }
+
         private void ComputeAllFilters()
         {
             TasksWorldBuilder.ComputeAll(ref filters);
@@ -58,6 +78,8 @@ namespace WorldGenerator2DClassLib
 
         public Bitmap GetWorldImage()
         {
+            if (filters.Count == 0) return null;
+
             ComputeAllFilters();
 
             Bitmap worldImg = new Bitmap(Option.Width, Option.Height);

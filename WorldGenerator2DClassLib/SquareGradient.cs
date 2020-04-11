@@ -4,6 +4,11 @@ namespace WorldGenerator2DClassLib
 {
     public class SquareGradient : NoiseFilterBase
     {
+        public SquareGradient() : base()
+        {
+            Name = "Square gradient";
+        }
+
         public SquareGradient(int width, int height) : base(width, height)
         {
             Name = "Square gradient";
